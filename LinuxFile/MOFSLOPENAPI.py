@@ -275,6 +275,7 @@ class MOFSLOPENAPI(object):
     m_strSourceID = ""  # Web,Desktop,Mobile
     m_strApikey = ""
     m_strApiSecretkey = ""
+    m_strAccessToken = ""
     m_strUseragent = "MOSL/" + version
     m_Base_Url = ""
     m_vendorinfo = ""
@@ -324,7 +325,7 @@ class MOFSLOPENAPI(object):
     TCPBroadcastAutoRelogin_counter = 1
     m_LastMsgTime = 0
 
-    def __init__(self, f_apikey, f_Base_Url, f_clientcode, f_strSourceID, f_browsername, f_browserversion):
+    def __init__(self, f_apikey, f_Base_Url, f_clientcode, f_strSourceID, f_browsername, f_browserversion, f_apisecretkey):
         WriteIntoLog("SUCCESS", "MOFSLOPENAPI.py", "Initilize Constructor")
 
         self.m_strApikey = f_apikey
@@ -332,7 +333,7 @@ class MOFSLOPENAPI(object):
         self.m_strClientLocalIP = GetLocalIPAddress()
         self.m_strClientPublicIP = GetPublicIPAddress()
         self.m_strSourceID = f_strSourceID
-        self.m_strApiSecretkey = self.m_strApiSecretkey
+        self.m_strApiSecretkey = f_apisecretkey
         self.m_Base_Url = f_Base_Url
         self.m_clientcodeDealer = f_clientcode
 
@@ -362,57 +363,62 @@ class MOFSLOPENAPI(object):
         try:
             if f_ApiPath =="Login":
                 # Login URL
-                Login_ApiPath = "/rest/login/v4/authdirectapi"
+                Login_ApiPath = "/rest/login/v7/authdirectapi"
                 URL = (str(base_Url)+str(Login_ApiPath))
-            
+
+            elif f_ApiPath =="AccessToken":
+                # AccessToken URL
+                AccessToken_ApiPath = "/rest/login/v1/getaccesstoken"
+                URL = (str(base_Url)+str(AccessToken_ApiPath))
+
             elif f_ApiPath =="Logout": 
                 # Logout URL
-                Logout_ApiPath = "/rest/login/v1/logout"
+                Logout_ApiPath = "/rest/login/v5/logout"
                 URL = (str(base_Url)+str(Logout_ApiPath))
                 
             elif f_ApiPath =="GetProfile":
                 # GetProfile URL
-                GetProfile_ApiPath = "/rest/login/v1/getprofile"
+                GetProfile_ApiPath = "/rest/login/v5/getprofile"
                 URL = (str(base_Url)+str(GetProfile_ApiPath))
 
             elif f_ApiPath =="OrderBook":
                 # OrderBook URL
-                OrderBook_ApiPath = "/rest/book/v1/getorderbook"
+                OrderBook_ApiPath = "/rest/book/v5/getorderbook"
                 URL = (str(base_Url)+str(OrderBook_ApiPath))
 
             elif f_ApiPath =="TradeBook":
                 # TradeBook URL
-                TradeBook_ApiPath = "/rest/book/v1/gettradebook"
+                TradeBook_ApiPath = "/rest/book/v4/gettradebook"
                 URL = (str(base_Url)+str(TradeBook_ApiPath))
 
             elif f_ApiPath =="GetPosition":
                 # GetPosition URL
-                GetPosition_ApiPath = "/rest/book/v1/getposition"
+                GetPosition_ApiPath = "/rest/book/v4/getposition"
                 URL = (str(base_Url)+str(GetPosition_ApiPath))
 
             elif f_ApiPath =="DPHolding":
                 # TradeBook URL
-                DPHolding_ApiPath = "/rest/report/v1/getdpholding"
+                DPHolding_ApiPath = "/rest/report/v3/getdpholding"
                 URL = (str(base_Url)+str(DPHolding_ApiPath))
 
             elif f_ApiPath =="PlaceOrder":
                 # PlaceOrder URL
-                PlaceOrder_ApiPath = "/rest/trans/v1/placeorder"
+                PlaceOrder_ApiPath = "/rest/trans/v2/placeorder"
                 URL = (str(base_Url)+str(PlaceOrder_ApiPath))
 
             elif f_ApiPath =="ModifyOrder":
                 # ModifyOrder URL
-                ModifyOrder_ApiPath = "/rest/trans/v2/modifyorder"
+                ModifyOrder_ApiPath = "/rest/trans/v5/modifyorder"
                 URL = (str(base_Url)+str(ModifyOrder_ApiPath))
 
             elif f_ApiPath =="CancelOrder":
                 # CancelOrder URL
-                CancelOrder_ApiPath = "/rest/trans/v1/cancelorder"
+                CancelOrder_ApiPath = "/rest/trans/v2/cancelorder"
                 URL = (str(base_Url)+str(CancelOrder_ApiPath))
 
             elif f_ApiPath =="positionconversion":
                 # positionconversion URL
-                positionconversion_ApiPath = "/rest/trans/v1/positionconversion"
+                positionconversion_ApiPath = "/rest/trans/v2/positionconversion"
                 URL = (str(base_Url)+str(positionconversion_ApiPath))
 
             elif f_ApiPath =="marginreport":
@@ -422,28 +428,33 @@ class MOFSLOPENAPI(object):
 
             elif f_ApiPath =="marginsummary":
                 # MarginSummary URL
-                marginsummary_ApiPath = "/rest/report/v1/getreportmarginsummary"
+                marginsummary_ApiPath = "/rest/report/v3/getreportmarginsummary"
                 URL = (str(base_Url)+str(marginsummary_ApiPath))
 
             elif f_ApiPath =="margindetail":
                 # MarginDetail URL
-                margindetail_ApiPath = "/rest/report/v1/getreportmargindetail"
+                margindetail_ApiPath = "/rest/report/v3/getreportmargindetail"
                 URL = (str(base_Url)+str(margindetail_ApiPath))
 
             elif f_ApiPath =="ltadata":
                 # LTA Data URL
-                ltadata_ApiPath = "/rest/report/v1/getltpdata"
+                ltadata_ApiPath = "/rest/report/v3/getltpdata"
                 URL = (str(base_Url)+str(ltadata_ApiPath))
 
             elif f_ApiPath =="exchangedata":
                 # EXCHANGE DATA URL
-                exchangedata_ApiPath = "/rest/report/v1/getscripsbyexchangename"
+                exchangedata_ApiPath = "/rest/report/v3/getscripsbyexchangename"
                 URL = (str(base_Url)+str(exchangedata_ApiPath))
 
             elif f_ApiPath =="getorderdetailbyunqueorderid":
                 # Getorderdetailbyunqueorderid
-                getorderdetailbyunqueorderid_Apipath = "/rest/book/v1/getorderdetailbyuniqueorderid"
+                getorderdetailbyunqueorderid_Apipath = "/rest/book/v5/getorderdetailbyuniqueorderid"
                 URL = (str(base_Url)+str(getorderdetailbyunqueorderid_Apipath))
+            
+            elif f_ApiPath =="gettradedetailbyuniqueorderid":
+                # Gettradedetailbyuniqueorderid
+                gettradedetailbyuniqueorderid_Apipath = "/rest/book/v4/gettradedetailbyuniqueorderid"
+                URL = (str(base_Url)+str(gettradedetailbyuniqueorderid_Apipath))
 
             elif f_ApiPath =="getbrokeragedetail":
                 # getbrokeragedetail
@@ -452,18 +463,28 @@ class MOFSLOPENAPI(object):
                
             elif f_ApiPath =="getbroadcastmaxlimit":
                 # getbroadcastmaxlimit
-                getbroadcastmaxlimit_Apipath = "/rest/report/v1/getbroadcastmaxlimit"
+                getbroadcastmaxlimit_Apipath = "/rest/report/v3/getbroadcastmaxlimit"
                 URL = (str(base_Url)+str(getbroadcastmaxlimit_Apipath))
 
             elif f_ApiPath =="resendotp":
                 # resendotp
-                resendotp_Apipath = "/rest/login/v3/resendotp"
+                resendotp_Apipath = "/rest/login/v5/resendotp"
                 URL = (str(base_Url)+str(resendotp_Apipath))
 
             elif f_ApiPath =="verifyotp":
                 # verifyotp
-                verifyotp_Apipath = "/rest/login/v3/verifyotp"
+                verifyotp_Apipath = "/rest/login/v5/verifyotp"
                 URL = (str(base_Url)+str(verifyotp_Apipath))
+
+            elif f_ApiPath =="PositionDetail":
+                # PositionDetail
+                PositionDetail_Apipath = "/rest/book/v4/getpositiondetail"
+                URL = (str(base_Url)+str(PositionDetail_Apipath))
+            
+            elif f_ApiPath =="DPRValues":
+                # DPRValues
+                DPRValues_Apipath = "rest/report/v3/getdprvalues"
+                URL = (str(base_Url)+str(DPRValues_Apipath))
 
             else:
                 print("Error in GetURL")
@@ -504,7 +525,8 @@ class MOFSLOPENAPI(object):
 
                 "latitude": str("%.4f" % self.m_latitudelongitude[0]),
                 "longitude": str("%.4f" % self.m_latitudelongitude[1]),
-                "sdkversion":"Python 3.0"
+                "sdkversion":"Python 4.0",
+                "accesstoken": self.m_strAccessToken
 
                 # "browsername": self.m_browsername,
                 # "browserversion": self.m_browserversion,
@@ -683,7 +705,53 @@ class MOFSLOPENAPI(object):
             l_loginResponse["errorcode"] = "" 
             l_loginResponse["AuthToken"] = ""   
 
-        return l_loginResponse   
+        return l_loginResponse  
+    
+    def GetAccessToken(self):
+
+        WriteIntoLog("SUCCESS", "MOFSLOPENAPI.py", "Initilaize GetAccessToken request send")
+        l_GetAccessTokenResponse = {}
+
+        try:
+            l_strApiUrl = MOFSLOPENAPI.GetUrl(self, "AccessToken")
+            l_strGetdata = {
+                "clientcode" : ""
+            }
+
+            l_strJSON = MOFSLOPENAPI.validate(self, l_strApiUrl, l_strGetdata)
+            if "GET ERROR " not in l_strJSON:
+                l_strDICT = json.loads(l_strJSON)   
+                if l_strDICT["status"] == "SUCCESS" :
+                    self.m_strAccessToken = l_strDICT["accesstoken"]      
+                    WriteIntoLog("SUCCESS", "MOFSLOPENAPI.py", "Login sucessfully")
+
+                else:
+                    WriteIntoLog(l_strDICT["status"], "MOFSLOPENAPI.py", l_strDICT["message"])
+
+                l_GetAccessTokenResponse = l_strDICT
+
+                             
+
+            else:
+                WriteIntoLog("FAILED", "MOFSLOPENAPI.py", l_strJSON.replace("GET ERROR ", ""))
+                WriteIntoLog("FAILED", "MOFSLOPENAPI.py", "GetAccessToken Request failed")
+
+                l_GetAccessTokenResponse["status"] = "FAILED"
+                l_GetAccessTokenResponse["message"] = l_strJSON.replace("GET ERROR ", "")
+                l_GetAccessTokenResponse["errorcode"] = "" 
+                l_GetAccessTokenResponse["data"] = {"null"}
+
+        except Exception as e:
+
+            WriteIntoLog("FAILED", "MOFSLOPENAPI.py", str(e)) 
+
+            l_GetAccessTokenResponse["status"] = "FAILED"
+            l_GetAccessTokenResponse["message"] = str(e)
+            l_GetAccessTokenResponse["errorcode"] = ""  
+            l_GetAccessTokenResponse["data"] = {"null"}
+
+        return l_GetAccessTokenResponse
+     
 
     def logout(self, f_strclientcode = None):
 
@@ -878,6 +946,46 @@ class MOFSLOPENAPI(object):
             l_GetPositionResponse["data"] = {"null"}
 
         return l_GetPositionResponse
+
+    def GetPositionDetail(self, f_strclientcode = None):
+
+        WriteIntoLog("SUCCESS", "MOFSLOPENAPI.py", "Initilaize GetPositionDetail request send")
+        l_GetPositionDetailResponse  = {}
+
+        try:
+            l_strApiUrl = MOFSLOPENAPI.GetUrl(self, "PositionDetail")
+            l_strGetdata = {
+                "clientcode": f_strclientcode
+            }
+
+            l_strJSON = MOFSLOPENAPI.validate(self, l_strApiUrl, l_strGetdata)
+            if "GET ERROR " not in l_strJSON:
+                l_strDICT = json.loads(l_strJSON)    
+                WriteIntoLog("SUCCESS", "MOFSLOPENAPI.py", "GetPositionDetail request sent Successfully")
+                l_GetPositionDetailResponse = l_strDICT
+
+                             
+
+            else:
+                WriteIntoLog("FAILED", "MOFSLOPENAPI.py", l_strJSON.replace("GET ERROR ", ""))
+                WriteIntoLog("FAILED", "MOFSLOPENAPI.py", "GetPositionDetail Request failed")
+
+                l_GetPositionDetailResponse["status"] = "FAILED"
+                l_GetPositionDetailResponse["message"] = l_strJSON.replace("GET ERROR ", "")
+                l_GetPositionDetailResponse["errorcode"] = "" 
+                l_GetPositionDetailResponse["data"] = {"null"}
+
+        except Exception as e:
+
+            WriteIntoLog("FAILED", "MOFSLOPENAPI.py", str(e)) 
+
+            l_GetPositionDetailResponse["status"] = "FAILED"
+            l_GetPositionDetailResponse["message"] = str(e)
+            l_GetPositionDetailResponse["errorcode"] = ""  
+            l_GetPositionDetailResponse["data"] = {"null"}
+
+        return l_GetPositionDetailResponse
+
 
     def GetDPHolding(self, f_strclientcode = None):
 
@@ -1180,8 +1288,6 @@ class MOFSLOPENAPI(object):
 
         return l_RMSDetailResponse
 
-
-
     def GetLtp(self, f_LTPData):
 
         WriteIntoLog("SUCCESS", "MOFSLOPENAPI.py", "Initilaize GetLtp request send")
@@ -1219,7 +1325,42 @@ class MOFSLOPENAPI(object):
 
         return l_LTPDataResponse
 
+    def GetDPRValues(self, f_LTPData):
 
+        WriteIntoLog("SUCCESS", "MOFSLOPENAPI.py", "Initilaize GetDPRValues request send")
+        l_LTPDataResponse  = {}
+
+        try:
+            l_strApiUrl = MOFSLOPENAPI.GetUrl(self, "DPRValues")
+            l_strGetdata = f_LTPData
+
+            l_strJSON = MOFSLOPENAPI.validate(self, l_strApiUrl, l_strGetdata)
+            if "GET ERROR " not in l_strJSON:
+                l_strDICT = json.loads(l_strJSON)    
+                WriteIntoLog("SUCCESS", "MOFSLOPENAPI.py", "GetDPRValues request sent Successfully")
+                l_DPRDataResponse = l_strDICT
+
+                             
+
+            else:
+                WriteIntoLog("FAILED", "MOFSLOPENAPI.py", l_strJSON.replace("GET ERROR ", ""))
+                WriteIntoLog("FAILED", "MOFSLOPENAPI.py", "GetDPRValues Request failed")
+
+                l_DPRDataResponse["status"] = "FAILED"
+                l_DPRDataResponse["message"] = l_strJSON.replace("GET ERROR ", "")
+                l_DPRDataResponse["errorcode"] = "" 
+                l_DPRDataResponse["data"] = {"null"}
+
+        except Exception as e:
+
+            WriteIntoLog("FAILED", "MOFSLOPENAPI.py", str(e)) 
+
+            l_DPRDataResponse["status"] = "FAILED"
+            l_DPRDataResponse["message"] = str(e)
+            l_DPRDataResponse["errorcode"] = ""
+            l_DPRDataResponse["data"] = {"null"}  
+
+        return l_DPRDataResponse
 
     def GetInstrumentFile(self, f_exchangename, f_clientcode = None):
 

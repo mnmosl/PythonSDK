@@ -5,21 +5,23 @@
 
 from MOFSLOPENAPI import MOFSLOPENAPI
 
-# # You will get Your api key from website 
+# You will get Your api key from website
 ApiKey = "" 
 
-# # userid and password is your trading account username and password
+# userid and password is your trading account username and password
 userid = "" 
-password = ""   
+password = "" 
 Two_FA = ""
 vendorinfo = ""
 clientcode = None 
+ 
 
 # # if Your SourceId is web then pass browsername and browser version in case of Desktop you dont need to passanyting
 SourceID = "Desktop"            # Web,Desktop
 browsername = "chrome"      
 browserversion = "104"      
 totp = ""
+apisecretkey = ""
  
 # NOTE:
 # totp – Send the 6 digit OTP on login using any Authenticator App.
@@ -36,7 +38,7 @@ Base_Url = "https://openapi.motilaloswaluat.com"
 
 
 # Initialize MofslOpenApi using Apikey, Base_Url and clientcode 
-Mofsl = MOFSLOPENAPI(ApiKey, Base_Url, clientcode, SourceID, browsername, browserversion)
+Mofsl = MOFSLOPENAPI(ApiKey, Base_Url, clientcode, SourceID, browsername, browserversion, apisecretkey)
 
 # Uncomment print statement to execute
 # Loginrequest will always be first request with each following request
@@ -45,6 +47,10 @@ Mofsl = MOFSLOPENAPI(ApiKey, Base_Url, clientcode, SourceID, browsername, browse
 print("--------------------------------Login--------------------------------")
 # Mofsl.login(userid, password)
 print(Mofsl.login(userid, password, Two_FA, totp, vendorinfo))
+
+# AccessToken by Clientcode and password
+print("--------------------------------AccessToken--------------------------------")
+print(Mofsl.GetAccessToken())
 
 # print("--------------------------------verifyotp--------------------------------")
 # otp = input("Enter Input: ")
@@ -135,6 +141,11 @@ print(Mofsl.login(userid, password, Two_FA, totp, vendorinfo))
 # # Mofsl.GetPosition(clientcode)   
 # print(Mofsl.GetPosition(clientcode))
 
+# # GetPositionDetail 
+# print("--------------------------------GetPositionDetail--------------------------------")
+# # Mofsl.GetPositionDetail(clientcode)   
+# print(Mofsl.GetPositionDetail(clientcode))
+
 
 # # GetDPHolding 
 # print("--------------------------------GetHolding--------------------------------")
@@ -167,10 +178,8 @@ print(Mofsl.login(userid, password, Two_FA, totp, vendorinfo))
 # # Mofsl.GetReportMarginDetail(clientcode)   
 # print(Mofsl.GetReportMarginDetail(clientcode))
 
-
 # # GetLtp
 # print("--------------------------------GetLtp--------------------------------")
-# # "clientcode":"" "KAL005" Optional only for dealer
 # LTPData = {
 #     "clientcode":clientcode,
 #     "exchange":"BSE",
@@ -205,6 +214,16 @@ print(Mofsl.login(userid, password, Two_FA, totp, vendorinfo))
 # # Mofsl.GetBrokerageDetail(BrokerageDetailInfo)   
 # print(Mofsl.GetBrokerageDetail(BrokerageDetailInfo))
 
+# # GetDPRValues
+# print("--------------------------------GetDPRValues--------------------------------")
+# # "symbol":"BANKNIFTY" or "NIFTY"
+# DPRData = {
+#     "clientcode":clientcode,
+#     "symbol:"BANKNIFTY"
+# }
+
+# # Mofsl.GetDPRValues(DPRData)   
+# print(Mofsl.GetDPRValues(DPRData))
 
 # # Logout 
 # print("--------------------------------Logout--------------------------------")
@@ -215,7 +234,6 @@ print(Mofsl.login(userid, password, Two_FA, totp, vendorinfo))
 # print("--------------------------------TradeWebhook--------------------------------")
 # # Mofsl.TradeWebhook(userid)   
 # print(Mofsl.TradeWebhook(userid))
-
 
 # --------------------------------------------------------------------------------------------------------
 # -----------------------------------------------WebSocket------------------------------------------------
