@@ -1,4 +1,4 @@
-# Follow README.txt
+# Follow README.
 # Install Packages 
 # Run following command in terminal to install required packages :
 # pip install -r requirements.txt
@@ -9,8 +9,8 @@ from MOFSLOPENAPI import MOFSLOPENAPI
 ApiKey = "" 
 
 # userid and password is your trading account username and password
-userid = "" 
-password = "" 
+userid = "EHYD393533" 
+password = "Mn@000001"
 Two_FA = ""
 vendorinfo = ""
 clientcode = None 
